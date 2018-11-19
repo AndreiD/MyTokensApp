@@ -15,8 +15,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     //disable screenshots
-    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-        WindowManager.LayoutParams.FLAG_SECURE);
+    if(!BuildConfig.DEBUG) {
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+          WindowManager.LayoutParams.FLAG_SECURE);
+    }
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
