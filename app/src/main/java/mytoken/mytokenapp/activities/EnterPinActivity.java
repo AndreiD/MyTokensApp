@@ -12,7 +12,6 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -91,8 +90,6 @@ public class EnterPinActivity extends BaseActivity {
     progressDialog.show();
     progressDialog.setCancelable(false);
 
-
-
     // add a delay to prevent brute forcing
     new CountDownTimer(defaultInterval, defaultInterval) {
       @Override public void onTick(long l) {
@@ -128,8 +125,6 @@ public class EnterPinActivity extends BaseActivity {
                   "Attention! If you enter more than 10 times an incorrect pin the application will reset. After that the only way to get your money is by importing your seed.")
                   .show();
             }
-
-
           }
         } catch (NoSuchPaddingException | NoSuchAlgorithmException |
             UnrecoverableEntryException | CertificateException | KeyStoreException |
@@ -148,13 +143,13 @@ public class EnterPinActivity extends BaseActivity {
         new AlertDialog.Builder(EnterPinActivity.this, R.style.AppCompatAlertDialogErrorStyle);
     builder.setTitle("Attention");
     builder.setMessage(
-        "You cannot recover a PIN. Create a new PIN & import your account again using your seed.");
+        "You cannot recover a PIN. Create a new PIN & import your account again using your SEED & PASSPHRASE.");
     builder.setCancelable(false);
     builder.setNegativeButton(android.R.string.cancel,
         (dialog, id) -> dialog.cancel());
     builder.setPositiveButton("RESET PIN", (dialogInterface, i) -> {
       PreferencesHelper preferencesHelper = new PreferencesHelper(EnterPinActivity.this);
-      preferencesHelper.setPinCreated(false);
+      preferencesHelper.clear();
       Toast.makeText(EnterPinActivity.this, "Please restart the app.", Toast.LENGTH_LONG).show();
       finish();
     });
