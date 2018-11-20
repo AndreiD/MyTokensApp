@@ -14,9 +14,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-
 import com.socks.library.KLog;
-
 import java.util.List;
 import mytoken.mytokenapp.BaseActivity;
 import mytoken.mytokenapp.BuildConfig;
@@ -29,10 +27,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class SplashActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
-  private AppCompatImageView imageView_logo;
   private static final String[] APP_PERMISSIONS =
       { Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE };
   private static final int RC_APP_PERMISSIONS = 1337;
+  private AppCompatImageView imageView_logo;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +44,6 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
       appPermissionsRequest();
       return;
     }
-
 
     Animation fadeIn = new AlphaAnimation(0, 1);
     fadeIn.setInterpolator(new DecelerateInterpolator());
@@ -136,40 +133,6 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     }
   }
 
-  private void checkNews() {
-
-    //TODO: add should update related to the app version number...
-
-    check_confirmed_tos();
-
-    //TheAPI theAPI = TheAPI.Factory.getIstance(SplashActivity.this);
-    //theAPI.getNews().enqueue(new Callback<JsonObject>() {
-    //  @Override public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-    //    if (response.code() > 299) {
-    //      KLog.e("an error occurred while trying to get the news");
-    //      check_pin_present();
-    //      return;
-    //    }
-    //    JsonObject jsonObject = response.body();
-    //    String news = jsonObject.get("news").getAsString();
-    //
-    //    if ((news != null) && (!news.isEmpty())) {
-    //
-    //      AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-    //      builder.setTitle("News");
-    //      builder.setCancelable(false);
-    //      builder.setMessage(news).setCancelable(false).setPositiveButton("OK", (dialog, id) -> check_pin_present());
-    //      AlertDialog alert = builder.create();
-    //      alert.show();
-    //    }
-    //  }
-    //
-    //  @Override public void onFailure(Call<JsonObject> call, Throwable t) {
-    //    check_pin_present();
-    //  }
-    //});
-  }
-
   private void check_confirmed_tos() {
 
     //terms and agreements
@@ -223,14 +186,14 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
       Log.d("permissions", "all permissions were granted");
       check_confirmed_tos();
     } else {
-      Log.w("!!!", "not all permissions were granted!");
+      Log.w("permissions", "not all permissions were granted!");
     }
   }
 
   @Override
   public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-    Log.e("!!!",
-        "onPermissionsDenied:" + perms.toString() + " >>> " + requestCode + ":" + perms.size());
+    Log.e("onPermissionsDenied",
+        perms.toString() + " >>> " + requestCode + ":" + perms.size());
 
     DialogFactory.simple_toast(SplashActivity.this, getString(R.string.permissions_are_needed))
         .show();
