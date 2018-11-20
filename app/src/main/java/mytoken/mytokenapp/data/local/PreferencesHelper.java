@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 public class PreferencesHelper {
 
   private static final String PREF_FILE_NAME = "myapp_shared_prefs";
-  private static final String KEY_WALLET_CREATED = "KEY_WALLET_CREATED";
   private static final String KEY_PIN_CREATED = "KEY_PIN_CREATED";
   private static final String KEY_SEED = "KEY_SEED";
   private static final String KEY_ADDRESS = "KEY_ADDRESS";
@@ -30,9 +29,7 @@ public class PreferencesHelper {
     mPref.edit().clear().apply();
   }
 
-  public void setWalletCreated(boolean walletCreated) {
-    mPref.edit().putBoolean(KEY_WALLET_CREATED, walletCreated).commit();
-  }
+
 
   public boolean getPinCreated() {
     return mPref.getBoolean(KEY_PIN_CREATED, false);
@@ -59,7 +56,7 @@ public class PreferencesHelper {
   }
 
   public String getAddress() {
-    return mPref.getString(KEY_ADDRESS, "");
+    return mPref.getString(KEY_ADDRESS, null);
   }
 
   public void setAddress(String addr) {

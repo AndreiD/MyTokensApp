@@ -62,4 +62,5 @@
     SUFFERED AS A RESULT OF ACCESSING, USE OF, OR RELIANCE UPON MyTokens INFORMATION AND SERVICES.
   </string>
   <string name="action_manage_tokens">Manage Tokens</string>
+  <string name="confirm_seed">Confirm Seed</string>
 </resources>

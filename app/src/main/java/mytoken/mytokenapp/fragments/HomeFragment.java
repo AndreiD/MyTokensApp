@@ -263,7 +263,7 @@ public class HomeFragment extends BaseFragment {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String network_preference = prefs.getString("network_preference", "mainnet");
-        if (!network_preference.toUpperCase().contains("mainnet")){
+        if (!network_preference.equals("mainnet")){
           textView_fragmentHome_status.setText("you are using a test network");
           textView_fragmentHome_status.setTextColor(getResources().getColor(R.color.appcolor_red_darker));
         }

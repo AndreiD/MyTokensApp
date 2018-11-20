@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="mytoken.mytokenapp">
 
-
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.CAMERA"/>
+
   <uses-feature android:name="android.hardware.camera"/>
   <uses-feature android:name="android.hardware.camera.autofocus"/>
+
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
   <application
       android:name=".BaseApplication"
       android:allowBackup="false"
@@ -59,7 +61,14 @@
         android:name=".qrscanner.QRScannerActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
         android:label="@string/scan_barcode"
-        android:noHistory="true"></activity>
-  </application>
+        android:noHistory="true"/>
 
-</manifest>
+    <activity
+        android:name=".activities.CreateNewAccountActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+        android:label="@string/confirm_seed"
+        android:noHistory="true"/>
+
+</application>
+
+    </manifest>
