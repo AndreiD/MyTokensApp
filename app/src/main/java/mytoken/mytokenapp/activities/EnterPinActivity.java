@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import mytoken.mytokenapp.BaseActivity;
 import mytoken.mytokenapp.BuildConfig;
 import mytoken.mytokenapp.R;
 import mytoken.mytokenapp.data.local.PreferencesHelper;
+import mytoken.mytokenapp.fragments.NewAccountFragment;
 import mytoken.mytokenapp.utils.Cryptography;
 import mytoken.mytokenapp.utils.DUtils;
 import mytoken.mytokenapp.utils.DialogFactory;
@@ -110,7 +112,18 @@ public class EnterPinActivity extends BaseActivity {
           String decryptedPIN = cryptography.decryptData(encryptedPIN);
           if (decryptedPIN.equals(enteredPIN)) {
             preferencesHelper.setInvalidPins(0);
-            startActivity(new Intent(EnterPinActivity.this, MainActivity.class));
+
+            //check if the wallet was created
+            String encAddress = preferencesHelper.getAddress();
+            if (encAddress == null) {
+              FragmentManager fragmentManager = getSupportFragmentManager();
+              fragmentManager.beginTransaction()
+                  .replace(android.R.id.content, NewAccountFragment.newInstance())
+                  .addToBackStack(null)
+                  .commit();
+            } else {
+              startActivity(new Intent(EnterPinActivity.this, MainActivity.class));
+            }
           } else {
 
             if (preferencesHelper.getInvalidPins() > 4) {

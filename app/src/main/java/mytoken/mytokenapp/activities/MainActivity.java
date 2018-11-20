@@ -72,7 +72,8 @@ public class MainActivity extends BaseActivity {
       }
     });
 
-    rate_this_app_logic();
+    // disabled until it makes sense
+    //rate_this_app_logic();
   }
 
   private void rate_this_app_logic() {
