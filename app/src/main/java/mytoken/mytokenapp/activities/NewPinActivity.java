@@ -60,6 +60,10 @@ public class NewPinActivity extends BaseActivity {
 
     // saves it to shared preferences
     PreferencesHelper preferencesHelper = new PreferencesHelper(NewPinActivity.this);
+
+    //deletes the previous app data
+    preferencesHelper.clear();
+
     preferencesHelper.setPinCreated(true);
 
     // stores it encrypted
