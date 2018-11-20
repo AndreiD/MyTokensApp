@@ -110,6 +110,8 @@ public class EnterPinActivity extends BaseActivity {
           String decryptedPIN = cryptography.decryptData(encryptedPIN);
           if (decryptedPIN.equals(enteredPIN)) {
             preferencesHelper.setInvalidPins(0);
+
+            //todo: check wallet created!
             startActivity(new Intent(EnterPinActivity.this, MainActivity.class));
           } else {
 
