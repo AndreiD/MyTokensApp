@@ -73,12 +73,12 @@ public class ConfirmPaymentDialog extends DialogFragment {
   private ProgressDialog progressDialog;
   private Web3j web3j = null;
 
-  public static ConfirmPaymentDialog newInstance(boolean isETH, String toAddress, String amount,
+  public static ConfirmPaymentDialog newInstance(boolean isETH, String toAddress, double amount,
       String tokenSymbol, String tokenAddress) {
     ConfirmPaymentDialog frag = new ConfirmPaymentDialog();
     Bundle args = new Bundle();
     args.putString(TOADDRESS, toAddress);
-    args.putString(AMOUNT, amount);
+    args.putDouble(AMOUNT, amount);
     args.putBoolean(IS_ETH, isETH);
     args.putString(TOKEN_SYMBOL, tokenSymbol);
     args.putString(TOKEN_ADDRESS, tokenAddress);
@@ -133,7 +133,7 @@ public class ConfirmPaymentDialog extends DialogFragment {
     super.onViewCreated(view, savedInstanceState);
 
     String toAddress = getArguments().getString(TOADDRESS, "");
-    String amount = getArguments().getString(AMOUNT, "");
+    double amount = getArguments().getDouble(AMOUNT, 0.0);
     boolean isEth = getArguments().getBoolean(IS_ETH, true);
     String tokenSymbol = getArguments().getString(TOKEN_SYMBOL, null);
     String tokenAddress = getArguments().getString(TOKEN_ADDRESS, null);
@@ -148,15 +148,17 @@ public class ConfirmPaymentDialog extends DialogFragment {
 
     txt_dlg_confirm_to.setText(toAddress);
 
-    txt_dlg_confirm_amount.setText(amount + " ETH");
+    txt_dlg_confirm_amount.setText(String.format("%s ETH",
+        Constants.getDecimalFormat().format(amount)));
+
     if (!isEth) {
       txt_dlg_confirm_amount.setText(amount + " " + tokenSymbol);
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
     String network_preference = prefs.getString("network_preference", "mainnet");
-    if (!network_preference.toUpperCase().contains("mainnet")){
-      txt_dlg_confirm_amount.setText(txt_dlg_confirm_amount.getText() + " (testnet)");
+    if (!network_preference.equals("mainnet")) {
+      txt_dlg_confirm_amount.setText(amount + " ETH (testnet)");
       txt_dlg_confirm_amount.setTextColor(getResources().getColor(R.color.appcolor_red_darker));
     }
 
@@ -174,7 +176,7 @@ public class ConfirmPaymentDialog extends DialogFragment {
     Cryptography cryptography = new Cryptography(getActivity());
 
     web3j = BaseApplication.getWeb3(getActivity());
-    BigDecimal value = Convert.toWei(amount, Convert.Unit.ETHER);
+    BigDecimal value = Convert.toWei(String.valueOf(amount), Convert.Unit.ETHER);
 
     try {
       String decodedPassword = cryptography.decryptData(preferencesHelper.getPassword());
@@ -217,6 +219,10 @@ public class ConfirmPaymentDialog extends DialogFragment {
             String.format("%s ETH",
                 Convert.fromWei(fee.toString(), Convert.Unit.ETHER).toString()));
 
+        //txt_dlg_confirm_total.setText(
+        //    String.format("%s ETH", Constants.getDecimalFormat().format(
+        //        Convert.fromWei(String.valueOf(value.toBigInteger().add(fee)), Convert.Unit.ETHER))));
+
         txt_dlg_confirm_total.setText(
             Convert.fromWei(String.valueOf(value.toBigInteger().add(fee)), Convert.Unit.ETHER)
                 + " ETH");
@@ -237,10 +243,10 @@ public class ConfirmPaymentDialog extends DialogFragment {
 
     btn_dlg_confirm_send.setOnClickListener(view1 -> {
 
-      String dlgMessage = "Sending transaction of " + amount + " ETH";
-      if (!isEth) {
-        dlgMessage = "Sending transaction of " + amount + " " + tokenSymbol;
-      }
+      String dlgMessage = "Sending transaction of " + txt_dlg_confirm_total.getText().toString();
+      //if (!isEth) {
+      //  dlgMessage = "Sending transaction of " + txt_dlg_confirm_total.getText().toString();
+      //}
       progressDialog =
           DialogFactory.createProgressDialog(getActivity(), dlgMessage);
       progressDialog.show();
@@ -249,7 +255,7 @@ public class ConfirmPaymentDialog extends DialogFragment {
       if (isEth) {
         sendTransactionForETH(credentials, toAddress, Double.valueOf(amount));
       } else {
-        sendTransactionForToken(credentials, toAddress, amount);
+        sendTransactionForToken(credentials, toAddress, String.valueOf(amount));
       }
     });
   }

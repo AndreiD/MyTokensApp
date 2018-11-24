@@ -122,7 +122,7 @@ public class SendFragment extends BaseFragment {
     //TODO: remove me
     if (BuildConfig.DEBUG) {
       send_editText_to.setText(
-          "0x000000dE5F9e90CE604Da5FD78ACd6FAE789eCCA");
+          "0x000000591672c2Ad77D99f62BE38Eb2C995bb09c");
       send_editText_amount.setText("0.1");
     }
 
@@ -208,7 +208,7 @@ public class SendFragment extends BaseFragment {
 
     FragmentManager fm = getActivity().getSupportFragmentManager();
     ConfirmPaymentDialog confirmPaymentDialog =
-        ConfirmPaymentDialog.newInstance(isEth, destinationAddress, String.valueOf(amount), tokenSymbol, tokenAddress);
+        ConfirmPaymentDialog.newInstance(isEth, destinationAddress, amount, tokenSymbol, tokenAddress);
     confirmPaymentDialog.show(fm, "confirm_dialog_fragment");
   }
 
