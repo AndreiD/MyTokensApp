@@ -73,7 +73,6 @@ public class CreateNewAccountActivity extends BaseActivity {
 
     public Activity activity;
     private EditText editText_wallet_password;
-    private Button btn_dialog_password_cancel;
     private Button btn_dialog_password_continue;
 
     public EnterPasswordDialog(Activity activity) {
@@ -87,7 +86,6 @@ public class CreateNewAccountActivity extends BaseActivity {
 
       setContentView(R.layout.dialog_wallet_password);
       editText_wallet_password = findViewById(R.id.editText_wallet_password);
-      btn_dialog_password_cancel = findViewById(R.id.btn_dialog_password_cancel);
       btn_dialog_password_continue = findViewById(R.id.btn_dialog_password_continue);
 
       btn_dialog_password_continue.setOnClickListener(
@@ -104,7 +102,6 @@ public class CreateNewAccountActivity extends BaseActivity {
             dismiss();
           });
 
-      btn_dialog_password_cancel.setOnClickListener(view -> dismiss());
     }
   }
 

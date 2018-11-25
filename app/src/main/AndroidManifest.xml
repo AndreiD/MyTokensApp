@@ -66,8 +66,7 @@
     <activity
         android:name=".activities.CreateNewAccountActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-        android:label="@string/confirm_seed"
-        android:noHistory="true"/>
+        android:label="@string/confirm_seed"/>
 
 </application>
 
