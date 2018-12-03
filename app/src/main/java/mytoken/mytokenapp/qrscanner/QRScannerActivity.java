@@ -134,7 +134,6 @@ public class QRScannerActivity extends BaseActivity implements ZXingScannerView.
   /**
    * ETHEREUM ADDRESSES PARSING
    */
-
   private String parseAddress(final String payload) {
     String address = payload.split("\\?")[0];
     address = handleEthereumPrefix(address);
