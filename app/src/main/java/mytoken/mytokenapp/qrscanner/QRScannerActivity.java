@@ -7,21 +7,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
 import com.google.zxing.Result;
 import com.socks.library.KLog;
-
+import java.math.BigInteger;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import mytoken.mytokenapp.BaseActivity;
 import mytoken.mytokenapp.R;
 import mytoken.mytokenapp.utils.DialogFactory;
 import mytoken.mytokenapp.utils.SecurityHolder;
+import org.bouncycastle.util.encoders.Hex;
 
 import static android.Manifest.permission.CAMERA;
 
 public class QRScannerActivity extends BaseActivity implements ZXingScannerView.ResultHandler {
 
   private static final int REQUEST_CAMERA = 1;
+  private static final String EXTERNAL_URL_PREFIX = "ethereum:";
+  private static final String PARAMETER_VALUE_REGEX = "=([^&]+)*";
   private ZXingScannerView mScannerView;
   private String type;
 
@@ -68,7 +70,7 @@ public class QRScannerActivity extends BaseActivity implements ZXingScannerView.
                 DialogFactory.warning_toast(QRScannerActivity.this, getString(R.string.we_need_camera_permission)).show();
                 new DialogInterface.OnClickListener() {
                   @Override public void onClick(DialogInterface dialog, int which) {
-                      requestPermissions(new String[] { CAMERA }, REQUEST_CAMERA);
+                    requestPermissions(new String[] { CAMERA }, REQUEST_CAMERA);
                   }
                 };
                 return;
@@ -123,10 +125,45 @@ public class QRScannerActivity extends BaseActivity implements ZXingScannerView.
 
     KLog.d("WE HAVE " + type + " = " + rawData);
 
-    if(type.equals("address")){
-      SecurityHolder.lastScanAddress = rawData;
+    if (type.equals("address")) {
+      SecurityHolder.lastScanAddress = parseAddress(rawData);
       finish();
     }
+  }
 
+  /**
+   * ETHEREUM ADDRESSES PARSING
+   */
+
+  private String parseAddress(final String payload) {
+    String address = payload.split("\\?")[0];
+    address = handleEthereumPrefix(address);
+    address = handleMissingPrefix(address);
+    if (!isHex(address.substring(2))) return "";
+    if (!isValid(address)) return "";
+    return address;
+  }
+
+  private String handleEthereumPrefix(final String address) {
+    if (!address.startsWith(EXTERNAL_URL_PREFIX)) return address;
+    return address.substring(EXTERNAL_URL_PREFIX.length());
+  }
+
+  private boolean isHex(final String address) {
+    try {
+      new BigInteger(address, 16);
+      return true;
+    } catch (final NumberFormatException ex) {
+      return false;
+    }
+  }
+
+  private boolean isValid(final String address) {
+    return 40 <= address.length() && address.length() <= 42;
+  }
+
+  private String handleMissingPrefix(final String address) {
+    if (address.startsWith("0x")) return address;
+    return "0x" + Hex.toHexString(address.getBytes());
   }
 }
