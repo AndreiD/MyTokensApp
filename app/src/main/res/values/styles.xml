@@ -5,7 +5,7 @@
     <!-- Customize your theme here. -->
 
     <item name="colorPrimary">@color/white</item>
-    <item name="colorPrimaryDark">@color/app_bg_black_dark</item>
+    <item name="colorPrimaryDark">@color/bb_darkBackgroundColor</item>
     <item name="colorAccent">@color/zen_color</item>
     <item name="android:windowBackground">@color/app_window_bglight_color</item>
 
@@ -21,7 +21,7 @@
 
   <style name="TextAppearance.Title" parent="android:TextAppearance">
     <item name="android:textSize">18sp</item>
-    <item name="fontPath">fonts/muli_bold.ttf</item>
+    <item name="fontPath">fonts/bold.ttf</item>
   </style>
 
   <style name="AppTheme.RadioButtonStyle">

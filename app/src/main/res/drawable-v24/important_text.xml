@@ -29,7 +29,7 @@
           android:right="4dp"
           android:top="2dp"/>
 
-      <stroke android:color="@color/appcolor_light_grey" android:width="0.8dp"></stroke>
+      <stroke android:color="@color/LightGrey" android:width="0.8dp"></stroke>
     </shape>
 
 

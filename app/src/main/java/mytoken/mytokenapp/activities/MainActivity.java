@@ -14,7 +14,6 @@ import com.socks.library.KLog;
 import hotchemi.android.rate.AppRate;
 import mytoken.mytokenapp.BaseActivity;
 import mytoken.mytokenapp.R;
-import mytoken.mytokenapp.fragments.AddNewTokenFragment;
 import mytoken.mytokenapp.fragments.HomeFragment;
 import mytoken.mytokenapp.fragments.ManageTokensFragment;
 import mytoken.mytokenapp.fragments.ReceiveFragment;
@@ -78,9 +77,9 @@ public class MainActivity extends BaseActivity {
 
   private void rate_this_app_logic() {
     AppRate.with(this)
-        .setInstallDays(5)
-        .setLaunchTimes(5)
-        .setRemindInterval(2)
+        .setInstallDays(3)
+        .setLaunchTimes(3)
+        .setRemindInterval(1)
         .setShowLaterButton(true)
         .setDebug(false)
         .monitor();
@@ -96,18 +95,6 @@ public class MainActivity extends BaseActivity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.action_add:
-        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.contentContainer, new AddNewTokenFragment());
-        t.addToBackStack("fragment_add_new_token");
-        t.commit();
-        break;
-      case R.id.action_manage_tokens:
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.contentContainer, new ManageTokensFragment());
-        ft.addToBackStack("fragment_manage_tokens");
-        ft.commit();
-        break;
       case R.id.action_exit:
         finish();
         break;

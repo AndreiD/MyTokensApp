@@ -8,10 +8,12 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class Constants {
-  // development address:
-  // 0x06205f4394eeadbe3d5046aa570f6cb8e30bccf1 =
+
+  // Testing seed
   // fuel dune marriage parent fever spike close clog test hip final demise
-  public static final String CONTRACT_ADDRESS = "0x3758a452fd5139db395fdb7253c919d26086a378";
+
+  //https://etherscan.io/token/0xfd2bdfdce55bad3b4b916e5758d44f0f8bc2d680
+  public static final String CONTRACT_ADDRESS = "0xfd2bdfdce55bad3b4b916e5758d44f0f8bc2d680";
   public static final BigInteger DEFAULT_GAS_LIMIT = new BigInteger("200000");
   public static final BigInteger CHEAP_GAS_PRICE = new BigInteger("4100000000");
   public static final BigInteger NORMAL_GAS_PRICE = new BigInteger("8600000000");
@@ -42,18 +44,18 @@ public class Constants {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
     String networkPreference = prefs.getString("network_preference", "");
 
-    final String INFURA_KEY = "2wIEW5lLyEaefGEPhoxX"; // please don't use it since you can get one free
+    final String INFURA_KEY = "5d09436c72db420e87ce0c587e48c073"; // please don't use it since you can get one free
     switch (networkPreference) {
       case "mainnet":
-        return "https://mainnet.infura.io/" + INFURA_KEY;
+        return "https://mainnet.infura.io/v3/" + INFURA_KEY;
       case "rinkeby":
-        return "https://rinkeby.infura.io/" + INFURA_KEY;
+        return "https://rinkeby.infura.io/v3/" + INFURA_KEY;
       case "ropsten":
-        return "https://ropsten.infura.io/" + INFURA_KEY;
+        return "https://ropsten.infura.io/v3/" + INFURA_KEY;
       case "kovan":
-        return "https://kovan.infura.io/" + INFURA_KEY;
+        return "https://kovan.infura.io/v3/" + INFURA_KEY;
       default:
-        return "https://mainnet.infura.io/" + INFURA_KEY;
+        return "https://mainnet.infura.io/v3/" + INFURA_KEY;
     }
   }
 

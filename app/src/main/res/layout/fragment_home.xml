@@ -135,13 +135,6 @@
             android:textColor="@color/grey_h"
             />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/home_line_chart"
-            android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            />
-
     </LinearLayout>
 
 

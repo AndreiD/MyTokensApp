@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.socks.library.KLog;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,8 +21,14 @@ import java.security.cert.CertificateException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import io.reactivex.Completable;
 import mytoken.mytokenapp.BaseActivity;
+import mytoken.mytokenapp.BaseApplication;
+import mytoken.mytokenapp.Constants;
 import mytoken.mytokenapp.R;
+import mytoken.mytokenapp.data.local.AppDatabase;
+import mytoken.mytokenapp.data.local.EthToken;
 import mytoken.mytokenapp.data.local.PreferencesHelper;
 import mytoken.mytokenapp.fragments.NewAccountFragment;
 import mytoken.mytokenapp.utils.Cryptography;
@@ -60,11 +69,23 @@ public class NewPinActivity extends BaseActivity {
 
     // saves it to shared preferences
     PreferencesHelper preferencesHelper = new PreferencesHelper(NewPinActivity.this);
+    AppDatabase db = BaseApplication.getAppDatabase(NewPinActivity.this);
 
     //deletes the previous app data
     preferencesHelper.clear();
 
     preferencesHelper.setPinCreated(true);
+
+    //init the stuff
+    // set default token
+    EthToken ethToken = new EthToken(Constants.CONTRACT_ADDRESS, "OAS Chain", "OAS", 18);
+    Completable.fromAction(() -> db.tokenDao().insertAll(ethToken)).subscribe(() -> {
+      KLog.d("done inserting token in the database");
+      preferencesHelper.setDefaultToken(ethToken.getAddress());
+    }, throwable -> {
+      KLog.e(throwable);
+    });
+
 
     // stores it encrypted
     Cryptography cryptography = new Cryptography(getApplication());

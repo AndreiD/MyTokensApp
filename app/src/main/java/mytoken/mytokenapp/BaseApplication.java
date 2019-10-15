@@ -33,7 +33,7 @@ public class BaseApplication extends Application {
 
     //fonts init
     CalligraphyConfig.initDefault(
-        new CalligraphyConfig.Builder().setDefaultFontPath("fonts/muli.ttf")
+        new CalligraphyConfig.Builder().setDefaultFontPath("fonts/regular.ttf")
             .setFontAttrId(R.attr.fontPath)
             .build());
 

@@ -26,6 +26,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import mytoken.mytokenapp.BaseActivity;
 import mytoken.mytokenapp.BuildConfig;
+import mytoken.mytokenapp.Constants;
 import mytoken.mytokenapp.R;
 import mytoken.mytokenapp.data.local.PreferencesHelper;
 import mytoken.mytokenapp.fragments.NewAccountFragment;
@@ -112,6 +113,8 @@ public class EnterPinActivity extends BaseActivity {
           String decryptedPIN = cryptography.decryptData(encryptedPIN);
           if (decryptedPIN.equals(enteredPIN)) {
             preferencesHelper.setInvalidPins(0);
+
+
 
             //check if the wallet was created
             String encAddress = preferencesHelper.getAddress();

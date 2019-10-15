@@ -42,7 +42,7 @@
   <string name="seed">Seed</string>
   <string name="password">Password</string>
   <string name="permissions_are_needed">
-    <![CDATA[We need CAMERA & READ EXTERNAL STORAGE permissions in order for this application to function]]></string>
+    <![CDATA[We need CAMERA & READ EXTERNAL STORAGE permissions in order for this application to function correctly]]></string>
   <string name="before_we_start">Before we start, we need couple of permissions.</string>
   <string name="confirm_payment">Confirm Payment</string>
   <string name="appbar_scrolling_view_behavior" translatable="false">

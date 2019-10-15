@@ -44,7 +44,6 @@ import mytoken.mytokenapp.Constants;
 import mytoken.mytokenapp.R;
 import mytoken.mytokenapp.data.local.AppDatabase;
 import mytoken.mytokenapp.data.local.PreferencesHelper;
-import mytoken.mytokenapp.dialogs.ChangeTokenDialog;
 import mytoken.mytokenapp.dialogs.ConfirmPaymentDialog;
 import mytoken.mytokenapp.qrscanner.QRScannerActivity;
 import mytoken.mytokenapp.utils.Cryptography;
@@ -237,36 +236,36 @@ public class SendFragment extends BaseFragment {
     send_textView_amount.setTextColor(getResources().getColor(R.color.app_grey));
   }
 
-  @OnClick(R.id.send_token_radioButton) public void onClickToken() {
-
-    // if we have more than 1 token, show a token picker dialog
-    db.tokenDao().totalTokens().subscribe(totalTokensDb -> {
-      if (totalTokensDb > 1) {
-
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        ChangeTokenDialog changeTokenDialog = new ChangeTokenDialog();
-        changeTokenDialog.show(fm, "change_token_dialog");
-
-        fm.registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
-          @Override
-          public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-            super.onFragmentViewDestroyed(fm, f);
-            if (f instanceof ChangeTokenDialog) {
-              db.tokenDao().findByAddress(preferencesHelper.getDefaultToken()).subscribe(
-                  ethToken -> {
-                    token_symbol = ethToken.getSymbol();
-                    send_token_radioButton.setText(token_symbol);
-                    send_textView_currency.setText(token_symbol);
-                  });
-              onCheckedChangedRadioToken();
-              updateBalances(-1L);
-            }
-            fm.unregisterFragmentLifecycleCallbacks(this);
-          }
-        }, false);
-      }
-    }, throwable -> KLog.e(throwable));
-  }
+//  @OnClick(R.id.send_token_radioButton) public void onClickToken() {
+//
+//    // if we have more than 1 token, show a token picker dialog
+//    db.tokenDao().totalTokens().subscribe(totalTokensDb -> {
+//      if (totalTokensDb > 1) {
+//
+//        FragmentManager fm = getActivity().getSupportFragmentManager();
+//        ChangeTokenDialog changeTokenDialog = new ChangeTokenDialog();
+//        changeTokenDialog.show(fm, "change_token_dialog");
+//
+//        fm.registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
+//          @Override
+//          public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
+//            super.onFragmentViewDestroyed(fm, f);
+//            if (f instanceof ChangeTokenDialog) {
+//              db.tokenDao().findByAddress(preferencesHelper.getDefaultToken()).subscribe(
+//                  ethToken -> {
+//                    token_symbol = ethToken.getSymbol();
+//                    send_token_radioButton.setText(token_symbol);
+//                    send_textView_currency.setText(token_symbol);
+//                  });
+//              onCheckedChangedRadioToken();
+//              updateBalances(-1L);
+//            }
+//            fm.unregisterFragmentLifecycleCallbacks(this);
+//          }
+//        }, false);
+//      }
+//    }, throwable -> KLog.e(throwable));
+//  }
 
   @OnCheckedChanged(R.id.send_token_radioButton) public void onCheckedChangedRadioToken() {
 

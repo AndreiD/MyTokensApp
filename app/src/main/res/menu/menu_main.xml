@@ -3,21 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-      android:id="@+id/action_add"
-      android:icon="@drawable/ic_add_circle_24dp"
-      android:orderInCategory="1"
-      android:title="@string/action_settings"
-      app:showAsAction="ifRoom"/>
-
-  <item
-      android:id="@+id/action_manage_tokens"
-      android:icon="@drawable/ic_manage_toekns_24dp"
-      android:orderInCategory="98"
-      android:title="@string/action_manage_tokens"
-      app:showAsAction="never"/>
-
-
-  <item
       android:id="@+id/action_settings"
       android:icon="@drawable/ic_settings_24dp"
       android:orderInCategory="99"

@@ -1,35 +1,24 @@
 package mytoken.mytokenapp.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.OnClick;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
 import com.socks.library.KLog;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
+import org.web3j.protocol.Web3j;
+import org.web3j.utils.Convert;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -42,32 +31,29 @@ import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import mytoken.mytokenapp.BaseApplication;
 import mytoken.mytokenapp.BaseFragment;
 import mytoken.mytokenapp.Constants;
 import mytoken.mytokenapp.R;
 import mytoken.mytokenapp.data.local.AppDatabase;
 import mytoken.mytokenapp.data.local.PreferencesHelper;
-import mytoken.mytokenapp.data.remote.ExchangeRatesAPI;
-import mytoken.mytokenapp.dialogs.ChangeTokenDialog;
 import mytoken.mytokenapp.utils.Cryptography;
 import mytoken.mytokenapp.utils.QueryBlockchain;
 import mytoken.mytokenapp.utils.Token;
-import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.protocol.Web3j;
-import org.web3j.utils.Convert;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment {
 
@@ -78,7 +64,6 @@ public class HomeFragment extends BaseFragment {
   @BindView(R.id.textView_fragmentHome_greeting) TextView textView_fragmentHome_greeting;
   @BindView(R.id.linlayout_fragmenthome_balance_token) LinearLayout linlayout_fragmenthome_balance_token;
   @BindView(R.id.textView_fragmentHome_date) TextView textView_fragmentHome_date;
-  @BindView(R.id.home_line_chart) LineChart home_line_chart;
   private Web3j web3j = null;
   private Disposable disposable;
   private PreferencesHelper preferencesHelper;
@@ -115,93 +100,6 @@ public class HomeFragment extends BaseFragment {
     if (isjustcreated) {
       textView_fragmentHome_status.setText("Thank you for creating a wallet with us.");
     }
-  }
-
-  private void setupChart(String tokenSymbol) {
-    home_line_chart.setDrawGridBackground(false);
-    home_line_chart.getDescription().setEnabled(false);
-    home_line_chart.setTouchEnabled(false);
-    home_line_chart.setDragEnabled(false);
-    home_line_chart.setScaleEnabled(false);
-    home_line_chart.setPinchZoom(false);
-    home_line_chart.setBackgroundColor(Color.WHITE);
-    home_line_chart.setDrawGridBackground(false);
-    home_line_chart.setDrawBorders(false);
-
-    ArrayList<Entry> values = new ArrayList<>();
-
-    ExchangeRatesAPI exchangeRatesAPI = ExchangeRatesAPI.Factory.getIstance(getActivity());
-
-    exchangeRatesAPI.getGraphData(tokenSymbol).enqueue(new Callback<JsonObject>() {
-      @Override public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-        if (response.code() > 299) {
-          KLog.e("failed to get historical data for the chart");
-          home_line_chart.setVisibility(View.GONE);
-          return;
-        }
-
-        JsonObject jsonObject = response.body();
-
-        //try it again, but only if it's not ETH
-        if (jsonObject.toString().toLowerCase().contains("error") && !tokenSymbol.equals("ETH")) {
-          setupChart("ETH");
-          return;
-        }
-
-        JsonArray jArrayData = jsonObject.get("Data").getAsJsonArray();
-        for (int i = 0; i < jArrayData.size(); i++) {
-          try {
-            JsonObject dataJsonObject = jArrayData.get(i).getAsJsonObject();
-            //long time = dataJsonObject.get("time").getAsLong();
-            double close = dataJsonObject.get("close").getAsDouble();
-            values.add(new Entry(i, (float) close));
-          } catch (Exception ignored) {
-          }
-        }
-
-        if (values.size() == 0) {
-          return;
-        }
-
-        LineDataSet ethToUsdLine = new LineDataSet(values, tokenSymbol + " - last 3 months");
-        ethToUsdLine.setDrawIcons(false);
-        ethToUsdLine.setColor(Color.BLACK);
-        ethToUsdLine.setLineWidth(2f);
-        ethToUsdLine.setFormLineWidth(1f);
-        ethToUsdLine.setDrawCircles(false);
-        ethToUsdLine.setDrawValues(false);
-        ethToUsdLine.setDrawCircleHole(false);
-        ethToUsdLine.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-
-        // remove axis
-        YAxis rightAxis = home_line_chart.getAxisRight();
-        rightAxis.setEnabled(false);
-
-        YAxis leftAxis = home_line_chart.getAxisLeft();
-        leftAxis.setTextColor(Color.parseColor("#2962ff"));
-        leftAxis.setDrawGridLines(false);
-        leftAxis.setDrawZeroLine(false);
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setDrawAxisLine(false);
-        leftAxis.setValueFormatter((value, axis) -> "$" + String.valueOf((int) value));
-
-        XAxis xAxis = home_line_chart.getXAxis();
-        xAxis.setEnabled(false);
-
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(ethToUsdLine);
-        LineData data = new LineData(dataSets);
-
-        // set data
-        home_line_chart.setData(data);
-        home_line_chart.invalidate();
-      }
-
-      @Override public void onFailure(Call<JsonObject> call, Throwable t) {
-        KLog.e(t.getLocalizedMessage());
-        home_line_chart.setVisibility(View.GONE);
-      }
-    });
   }
 
   @Override public void onResume() {
@@ -275,17 +173,12 @@ public class HomeFragment extends BaseFragment {
       }
     });
 
-    if (preferencesHelper.getDefaultToken() == null) {
-      setupChart("ETH");
-      return;
-    }
 
     //get the default token from the db
     AppDatabase db = BaseApplication.getAppDatabase(getActivity());
     db.tokenDao().findByAddress(preferencesHelper.getDefaultToken()).subscribe(
         ethToken -> {
           textView_fragmentHome_tokenName.setText(ethToken.getName());
-          setupChart(ethToken.getSymbol().toUpperCase());
         });
 
     // get balance for token
@@ -333,27 +226,6 @@ public class HomeFragment extends BaseFragment {
         }
       }
     });
-  }
-
-  @OnClick(R.id.linlayout_fragmenthome_balance_token) public void onClickLayoutToken() {
-
-    FragmentManager fm = getActivity().getSupportFragmentManager();
-    ChangeTokenDialog changeTokenDialog = new ChangeTokenDialog();
-    changeTokenDialog.show(fm, "change_token_dialog");
-
-    fm.registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
-      @Override
-      public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-        super.onFragmentViewDestroyed(fm, f);
-        if (f instanceof ChangeTokenDialog) {
-          KLog.d(">>> update balances triggered");
-          textView_fragmentHome_balance_token.setText("");
-          textView_fragmentHome_tokenName.setText("");
-          updateBalances(-1L);
-        }
-        fm.unregisterFragmentLifecycleCallbacks(this);
-      }
-    }, false);
   }
 
   private void showGreeting() {
