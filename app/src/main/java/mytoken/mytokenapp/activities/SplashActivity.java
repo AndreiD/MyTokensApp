@@ -31,12 +31,15 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
       { Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE };
   private static final int RC_APP_PERMISSIONS = 1337;
   private AppCompatImageView imageView_logo;
+  private PreferencesHelper preferencesHelper;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_splash);
+
+    preferencesHelper = new PreferencesHelper(SplashActivity.this);
 
     imageView_logo = findViewById(R.id.imageView_logo);
 
@@ -115,9 +118,8 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
   @AfterPermissionGranted(RC_APP_PERMISSIONS)
   public void appPermissionsRequest() {
-    if (hasRequiredPermissions()) {
-      check_confirmed_tos();
-    } else {
+    if (!hasRequiredPermissions()) {
+
 
       AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this, R.style.AppCompatAlertDialogStyle);
       builder.setTitle(getString(R.string.before_we_start));
@@ -136,7 +138,7 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
   private void check_confirmed_tos() {
 
     //terms and agreements
-    PreferencesHelper preferencesHelper = new PreferencesHelper(SplashActivity.this);
+
     if (!preferencesHelper.getConfirmedTos()) {
       //show tos dialog
 

@@ -44,7 +44,7 @@ public class PreferencesHelper {
   }
 
   public void setConfirmedTos(boolean confirmedTos) {
-    mPref.edit().putBoolean(KEY_CONFIRMED_TOS, confirmedTos).commit();
+    mPref.edit().putBoolean(KEY_CONFIRMED_TOS, confirmedTos).apply();
   }
 
   public int getInvalidPins() {
