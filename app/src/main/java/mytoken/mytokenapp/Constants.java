@@ -12,8 +12,9 @@ public class Constants {
   // Testing seed
   // fuel dune marriage parent fever spike close clog test hip final demise
 
-  //https://etherscan.io/token/0xfd2bdfdce55bad3b4b916e5758d44f0f8bc2d680
-  public static final String CONTRACT_ADDRESS = "0xfd2bdfdce55bad3b4b916e5758d44f0f8bc2d680";
+  // Andy token rinkeby: 0x7ec133d17f253bf759d58882bf9ff18fddcf2155
+  //OASChain https://etherscan.io/token/0xfd2bdfdce55bad3b4b916e5758d44f0f8bc2d680
+  public static final String CONTRACT_ADDRESS = "0x7ec133d17f253bf759d58882bf9ff18fddcf2155";
   public static final BigInteger DEFAULT_GAS_LIMIT = new BigInteger("200000");
   public static final BigInteger CHEAP_GAS_PRICE = new BigInteger("4100000000");
   public static final BigInteger NORMAL_GAS_PRICE = new BigInteger("8600000000");
