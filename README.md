@@ -8,3 +8,4 @@ You can verify it's the same code by using jadx or dex2jar. The code inside the 
 
 If you find anything that doesn't looks like it should please make an issue, or use the Settings -> Send Feedback button.
 
+# License: MIT
